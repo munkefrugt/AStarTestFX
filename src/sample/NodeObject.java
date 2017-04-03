@@ -12,6 +12,8 @@ public class NodeObject {
     Group root;
     int z;
     int y;
+    boolean isWall = false;
+    boolean isNodePacman = false;
 
 
 
@@ -20,6 +22,8 @@ public class NodeObject {
         this.blockSize= blockSize;
         this.z = z;
         this.y = y;
+
+
 
 
     }
@@ -35,6 +39,9 @@ public class NodeObject {
     }
 
     public void makeNodeRectangle() {
+        if(!isWall)
+        {
+
         Rectangle rect= new Rectangle(z*blockSize, y*blockSize, blockSize, blockSize);
 
         rect.setFill(Color.TRANSPARENT);
@@ -44,7 +51,22 @@ public class NodeObject {
 
         // add to root
         root.getChildren().add(rect);
-        System.out.println();
 
+        }
+        else if(isWall)
+        {
+            Rectangle rectwall= new Rectangle(z*blockSize, y*blockSize, blockSize, blockSize);
+
+            rectwall.setFill(Color.BLACK);
+
+
+
+            // add to root
+            root.getChildren().add(rectwall);
+        }
+    }
+
+    public void makeNodewall() {
+        isWall = true;
     }
 }
