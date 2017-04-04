@@ -40,7 +40,11 @@ public class Setup {
 
 
             }
+
         }
+        // make a node Pacman
+        //nodeObject[3][3].PacmanSetTrue();
+
 
         // prints the nodes
         for(int y = 0; y < boxesY; y++) {
@@ -48,8 +52,8 @@ public class Setup {
             for(int x = 0; x < boxesX; x++) {
 
 
-                System.out.println("print nodeObject["+x+y+"] return unique z and y value for obj=  "+
-                        nodeObject[x][y].getUniqueZval()+ " ," + nodeObject[x][y].getUniqueYval());
+                System.out.println("print nodeObject["+x+y+"] return unique x and y value for obj=  "+
+                        nodeObject[x][y].getUniqueXval()+ " ," + nodeObject[x][y].getUniqueYval());
             }
         }
         // make walls
@@ -61,6 +65,7 @@ public class Setup {
 
 
         // line vertical
+
         makewallElement(2,2);
         makewallElement(2,3);
         makewallElement(2,4);
@@ -81,7 +86,7 @@ public class Setup {
         makewallElement(7,3);
         makewallElement(7,4);
         makewallElement(7,5);
-        makewallElement(7,6);
+
         makewallElement(7,7);
         makewallElement(7,8);
 
@@ -109,10 +114,18 @@ public class Setup {
 
 
     public void makeAStar() {
+
+        // notes on data structures: http://codereview.stackexchange.com/questions/126835/a-search-with-array-lists
+
         // make closet set
         // all nodes that have been visited are in the closed set. including start node.
+        //ArrayList<AStarNode>
+        //getPacmanNode();
+
+
 
         // make openset
+
         // all nodes that are not visited are in the open set.
 
         // make pacman the startnode
@@ -126,7 +139,6 @@ public class Setup {
     public void updateAllAlgorithms() {
 
         // calculate the a* for
-        makeAStar();
         //
     }
 

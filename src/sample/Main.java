@@ -10,6 +10,37 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 
+
+
+/*
+notes on a a-star
+
+	// A* psudo code: http://web.mit.edu/eranki/www/tutorials/search/
+
+initialize the open list
+initialize the closed list
+put the starting node on the open list (you can leave its f at zero)
+
+while the open list is not empty
+    find the node with the least f on the open list, call it "q"
+    pop q off the open list
+    generate q's 8 successors and set their parents to q
+    for each successor
+    	if successor is the goal, stop the search
+        successor.g = q.g + distance between successor and q
+        successor.h = distance from goal to successor
+        successor.f = successor.g + successor.h
+
+        if a node with the same position as successor is in the OPEN list \
+            which has a lower f than successor, skip this successor
+        if a node with the same position as successor is in the CLOSED list \
+            which has a lower f than successor, skip this successor
+        otherwise, add the node to the open list
+    end
+    push q on the closed list
+end
+
+ */
 public class Main extends Application {
 
 
@@ -18,9 +49,9 @@ public class Main extends Application {
 
 
     NodeObject[][] nodeObject;
-    int boxesX = 30;
-    int boxesY = 20;
-    int blockSize = 30;
+    int boxesX = 10;
+    int boxesY = 10;
+    int blockSize = 50;
 
     int yHeight = boxesY *blockSize;
     int xWitdh = boxesX *blockSize ;
@@ -95,21 +126,22 @@ public class Main extends Application {
         final Rectangle pacMan = new Rectangle((directionX *(blockSize)+blockSize), (directionY *(blockSize)+blockSize), blockSize, blockSize);
         pacMan.setFill(Color.YELLOW);
 
-        final Rectangle gostpink = new Rectangle(2*blockSize, 2* blockSize, blockSize, blockSize);
-        gostpink.setFill(Color.PINK);
+        final Rectangle gostpink = new Rectangle(40*blockSize, 40* blockSize, blockSize, blockSize);
+        gostpink.setFill(Color.AQUA);
 
         // start location
-        final Rectangle rectStart = new Rectangle((directionX *(blockSize)+blockSize), (directionY *(blockSize)+blockSize), blockSize, blockSize);
-        rectStart.setFill(Color.GREEN);
+
         // end
+        System.out.println("start x,y"+directionX *(blockSize)+blockSize+"," +directionY *(blockSize)+blockSize);
         final Rectangle rectEnd = new Rectangle(xWitdh-2*blockSize, yHeight-2*blockSize, blockSize, blockSize);
         rectEnd.setFill(Color.RED);
-
-        // add walls
-
+        System.out.println("");
 
 
-        // make the nodeclass, to call each node object, do: nodeObject[z][y]. z, y, are numbers
+
+
+
+        // make the nodeclass, to call each node object, do: nodeObject[x][y]. x, y, are numbers
         nodeObject = new NodeObject[boxesX][boxesY];
 
         // make startupclass
@@ -119,7 +151,11 @@ public class Main extends Application {
 
 
 
-        root.getChildren().addAll(pacMan,gostpink,rectStart,rectEnd);
+        root.getChildren().addAll(pacMan,gostpink,rectEnd);
+
+        // add search algoritm classes
+        A_star a_star = new A_star(root,nodeObject,blockSize, boxesX,boxesY);
+
 
         primaryStage.setTitle("A*");
         primaryStage.setScene(scene);

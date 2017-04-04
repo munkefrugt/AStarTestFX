@@ -8,19 +8,29 @@ import javafx.scene.shape.Rectangle;
  * Created by v on 4/1/17.
  */
 public class NodeObject {
+
+    // the parent is the node it came from.
+    // or a node to reach this node
+    NodeObject[][] parent;
     int blockSize;
     Group root;
-    int z;
+    int x;
     int y;
+    int f;
+    int h;
+    int g;
+    // when node is made is wall is false
     boolean isWall = false;
+    // packMan will change node each time he takes a step. // default is false
     boolean isNodePacman = false;
 
+    Rectangle rect;
 
 
     public NodeObject(int z, int y, Group root, int blockSize) {
         this.root= root;
         this.blockSize= blockSize;
-        this.z = z;
+        this.x = z;
         this.y = y;
 
 
@@ -29,8 +39,8 @@ public class NodeObject {
     }
 
 
-    public int getUniqueZval() {
-        return z;
+    public int getUniqueXval() {
+        return x;
     }
 
     public int getUniqueYval()
@@ -42,7 +52,7 @@ public class NodeObject {
         if(!isWall)
         {
 
-        Rectangle rect= new Rectangle(z*blockSize, y*blockSize, blockSize, blockSize);
+        rect= new Rectangle(x *blockSize, y*blockSize, blockSize, blockSize);
 
         rect.setFill(Color.TRANSPARENT);
         rect.setStroke(Color.RED);
@@ -55,7 +65,7 @@ public class NodeObject {
         }
         else if(isWall)
         {
-            Rectangle rectwall= new Rectangle(z*blockSize, y*blockSize, blockSize, blockSize);
+            Rectangle rectwall= new Rectangle(x *blockSize, y*blockSize, blockSize, blockSize);
 
             rectwall.setFill(Color.BLACK);
 
@@ -68,5 +78,32 @@ public class NodeObject {
 
     public void makeNodewall() {
         isWall = true;
+    }
+
+    public void PacmanSetTrue() {
+        isNodePacman = true;
+    }
+
+    public void setFZero() {
+        f = 0;
+    }
+
+
+    public void setRectColor() {
+        //Rectangle rect= new Rectangle(x *blockSize, y*blockSize, blockSize, blockSize);
+
+        rect.setFill(Color.BLUE);
+
+        // add to root
+       // root.getChildren().add(rect);
+
+    }
+
+    public boolean getisWall() {
+        return isWall;
+    }
+
+    public void makeGreen() {
+        rect.setFill(Color.GREEN);
     }
 }
