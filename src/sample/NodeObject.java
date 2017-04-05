@@ -27,10 +27,10 @@ public class NodeObject {
     Rectangle rect;
 
 
-    public NodeObject(int z, int y, Group root, int blockSize) {
+    public NodeObject(int x, int y, Group root, int blockSize) {
         this.root= root;
         this.blockSize= blockSize;
-        this.x = z;
+        this.x = x;
         this.y = y;
 
 
@@ -105,5 +105,17 @@ public class NodeObject {
 
     public void makeGreen() {
         rect.setFill(Color.GREEN);
+    }
+
+    public int calculateAndGetH() {
+
+
+
+        return 0;
+    }
+
+    public void makeRed() {
+        rect.setFill(Color.RED);
+
     }
 }

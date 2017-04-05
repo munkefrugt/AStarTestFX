@@ -10,9 +10,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 
-
-
 /*
+the main grid is is made with nodes, first node is 0,0
+ X: (left to right) 0, 1,2 ect
+ Y: (from up to down) 0, 1,2 ect
+ x and y values stored in node are the same values. also starts with 0.
+
+
+
 notes on a a-star
 
 	// A* psudo code: http://web.mit.edu/eranki/www/tutorials/search/
@@ -133,8 +138,7 @@ public class Main extends Application {
 
         // end
         System.out.println("start x,y"+directionX *(blockSize)+blockSize+"," +directionY *(blockSize)+blockSize);
-        final Rectangle rectEnd = new Rectangle(xWitdh-2*blockSize, yHeight-2*blockSize, blockSize, blockSize);
-        rectEnd.setFill(Color.RED);
+
         System.out.println("");
 
 
@@ -151,7 +155,7 @@ public class Main extends Application {
 
 
 
-        root.getChildren().addAll(pacMan,gostpink,rectEnd);
+        root.getChildren().addAll(pacMan,gostpink);
 
         // add search algoritm classes
         A_star a_star = new A_star(root,nodeObject,blockSize, boxesX,boxesY);
