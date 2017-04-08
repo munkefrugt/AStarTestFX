@@ -88,7 +88,17 @@ public class Setup {
         makewallElement(7,5);
 
         makewallElement(7,7);
+
+
+        makewallElement(4,8);
+        makewallElement(5,8);
+        makewallElement(6,8);
         makewallElement(7,8);
+        makewallElement(7,9);
+        makewallElement(8,8);
+
+        makewallElement(9,9);
+
 
 
 
@@ -113,27 +123,7 @@ public class Setup {
     }
 
 
-    public void makeAStar() {
 
-        // notes on data structures: http://codereview.stackexchange.com/questions/126835/a-search-with-array-lists
-
-        // make closet set
-        // all nodes that have been visited are in the closed set. including start node.
-        //ArrayList<AStarNode>
-        //getPacmanNode();
-
-
-
-        // make openset
-
-        // all nodes that are not visited are in the open set.
-
-        // make pacman the startnode
-
-
-
-
-    }
 
     // make the gosts moves and make the algoritms.
     public void updateAllAlgorithms() {

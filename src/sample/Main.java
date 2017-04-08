@@ -54,8 +54,8 @@ public class Main extends Application {
 
 
     NodeObject[][] nodeObject;
-    int boxesX = 10;
-    int boxesY = 10;
+    int boxesX = 20;
+    int boxesY = 20;
     int blockSize = 50;
 
     int yHeight = boxesY *blockSize;
@@ -169,14 +169,13 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 //int directionX = 0, directionY = 0;
-
+                Pacman pacman = new Pacman();
                 if (up)
                 {
                     System.out.println("up activate");
                     directionY = directionY -blockSize;
                     // upate all
 
-                    setup.updateAllAlgorithms();
 
 
                 }
@@ -203,6 +202,8 @@ public class Main extends Application {
 
 
                 }
+                setup.updateAllAlgorithms();
+
                 pacMan.relocate(directionX, directionY);
                 //random x
 

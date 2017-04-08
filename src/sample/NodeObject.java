@@ -18,13 +18,20 @@ public class NodeObject {
     int y;
     int f;
     int h;
-    int g;
+
+    // default g is 0. beacuse the very node g is 0.
+    int g= 0;
     // when node is made is wall is false
     boolean isWall = false;
     // packMan will change node each time he takes a step. // default is false
     boolean isNodePacman = false;
+    boolean isGoalNode = false;
+
 
     Rectangle rect;
+    NodeObject CameFrom;
+    // in the beginning they are all on openlist exept the startnode witch is on closed list, there for its should be false
+     boolean isOnClosedList =false;
 
 
     public NodeObject(int x, int y, Group root, int blockSize) {
@@ -89,10 +96,11 @@ public class NodeObject {
     }
 
 
-    public void setRectColor() {
+    public void setRectColor(Color color) {
         //Rectangle rect= new Rectangle(x *blockSize, y*blockSize, blockSize, blockSize);
 
-        rect.setFill(Color.BLUE);
+
+        rect.setFill(color);
 
         // add to root
        // root.getChildren().add(rect);
@@ -117,5 +125,51 @@ public class NodeObject {
     public void makeRed() {
         rect.setFill(Color.RED);
 
+    }
+
+
+    public void setCameFrom(NodeObject currentCenterNode) {
+
+        this.CameFrom = currentCenterNode;
+
+    }
+
+    public void makeitPacman() {
+        isNodePacman = true;
+        rect.setFill(Color.YELLOW);
+    }
+
+    public void setH(int h) {
+        this.h = h;
+    }
+
+    public int getH() {
+        System.out.println("h = "+h);
+        return h;
+    }
+
+    public void calculateG(int stepvalueG) {
+
+
+        g = CameFrom.getG() + stepvalueG;
+        System.out.println("CameFrom.getG()"+CameFrom.getG());
+        System.out.println("g = "+ g +"**************************");
+    }
+
+    public int getG() {
+        return g;
+    }
+
+    public boolean isOnClosedList() {
+
+        return isOnClosedList;
+    }
+
+    public void putOnclosedList() {
+
+    }
+
+    public void takeOfOpenList() {
+        isOnClosedList = true;
     }
 }
