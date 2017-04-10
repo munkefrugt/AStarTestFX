@@ -21,6 +21,7 @@ public class Setup {
         this.boxesX = boxesX;
         this.boxesY = boxesY;
 
+        Gost pinkGost = new Gost();
 
     }
     // make nodes,and rectangles
@@ -31,12 +32,12 @@ public class Setup {
         for(int y = 0; y < boxesY; y++) {
 
             // make an array of squares.
-            for(int z = 0; z < boxesX; z++) {
+            for(int x = 0; x < boxesX; x++) {
                 // here the objects are made.
-                nodeObject[z][y]=new NodeObject(z,y,root,blockSize);
+                nodeObject[x][y]=new NodeObject(x,y,root,blockSize);
                 // make a square
                 //Transparent rectangle with Stroke
-                nodeObject[z][y].makeNodeRectangle();
+                nodeObject[x][y].makeNodeRectangle();
 
 
             }
@@ -44,6 +45,7 @@ public class Setup {
         }
         // make a node Pacman
         //nodeObject[3][3].PacmanSetTrue();
+
 
 
         // prints the nodes
@@ -63,7 +65,7 @@ public class Setup {
 
     private void makewalls() {
 
-
+        // make outer walls:
         // line vertical
 
         makewallElement(2,2);
@@ -99,6 +101,17 @@ public class Setup {
 
         makewallElement(9,9);
 
+        for(int y = 0; y < 20; y++) {
+
+                makewallElement(15,y);
+
+        }
+        for(int y = 2; y < 30; y++) {
+
+            makewallElement(11,y);
+
+        }
+
 
 
 
@@ -117,7 +130,7 @@ public class Setup {
     }
 
     public void makewallElement(int x, int y) {
-        System.out.println("make wall");
+        //System.out.println("make wall");
         nodeObject[x][y].makeNodewall();
         nodeObject[x][y].makeNodeRectangle();
     }

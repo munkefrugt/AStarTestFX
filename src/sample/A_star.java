@@ -3,7 +3,9 @@ package sample;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
+import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -12,11 +14,14 @@ import java.util.TreeMap;
 public class A_star {
     NodeObject goalNode;
     // the neighbornodes that are not walls are added to list list for, where they lateer are evaluated, for finding lowest f.
-    TreeMap<Integer, NodeObject> OpenlistUncheckedNeighbors = new TreeMap<Integer, NodeObject>();
+    Map<NodeObject, Double> OpenlistUncheckedNeighbors = new HashMap<NodeObject, Double>();
 
     // Closed list are visited nodes, Initially, only the start node is known. and visited,
     // we add it to the closed list in the constructor.
     ArrayList<NodeObject> closedList = new ArrayList<NodeObject>();
+
+    // list for the Astar final path.
+    ArrayList<NodeObject> finalPathNodes = new ArrayList<NodeObject>();
 
     //initialize the open list
     // insert the currently discovered nodes that are not evaluated yet.
@@ -32,10 +37,11 @@ public class A_star {
 
     int CurrentCenterNodeX;
     int CurrentCenterNodeY;
-    int startX=10;
-    int startY=4;
+    int startX=3;
+    int startY=6;
     NodeObject pacmanNode;
     NodeObject currentCenterNode = pacmanNode;
+
 
     // the node that its is currently checking from is the current center node, from here it finds neighbors,
     // in each step as the a-star goes along, the center node is changed.
@@ -47,10 +53,10 @@ public class A_star {
     NodeObject[][] nodeObject;
     Group root;
     //int g =10; // can be changed if needed.
-    int goalX =8, goalY =9;
+    int goalX =20, goalY =9;
     private int xAbove;
     private int yAbove;
-    private int stepValueG = 10;
+    private int stepValueG = 1;
     // start with the pacman location
     // now just testing.
     /*
@@ -92,7 +98,7 @@ public class A_star {
         pacmanNode = nodeObject[startX][startY];
         pacmanNode.makeitPacman();
         currentCenterNode = nodeObject[startX][startY];
-        //currentCenterNode.takeOfOpenList();
+        currentCenterNode.takeOfOpenList();
         //Make  goal node.
         goalNode= nodeObject[goalX][goalY];
         nodeObject[goalX][goalY].setRectColor(Color.RED);
@@ -106,161 +112,242 @@ public class A_star {
         // the main loop that makes the a-star  **********************************
           //while the open list is not empty
 
-        boolean goalNotFound = true;
+
         // i<3 || true // TODO replace with true
-        while(i<2)
+        while(true)
             // TODO remember g costs get added. each node will have a gvalue, g = g value of where it came from plus new g cost.
 
         {
 
+                System.out.println("previusNode (x,y)  "+currentCenterNode.getUniqueXval()+","+currentCenterNode.getUniqueYval());
 
-            // is current node = goal? then break out.
+                // is current node = goal? then break out.
 
-            if (currentCenterNode == goalNode)
-            {
-                // jump out of loop
-                System.out.println("gaol node is found , break *******************************");
-                break;
-            }
-            // clear the OpenlistUncheckedNeighbors, make room for new f values.
+                if (currentCenterNode == goalNode)
+                {
+                    // jump out of loop
+                    System.out.println("goal node is found , break *******************************");
+                    break;
+                }
+                // clear the OpenlistUncheckedNeighbors, make room for new f values.
 
-            //initialize the closed list     // The set of nodes already evaluated.
-
-
-            // add only the starting node to the closed list in the beginning.
-            // get the new node onto the closed list.
-            closedList.add(currentCenterNode);
+                //initialize the closed list     // The set of nodes already evaluated.
 
 
-
-
-            // when nodes are checked they go on closed list.
-
-
-            // put the starting node on the closed list (you can leave its f at zero)
-
-            // pretend start very top corners inside boarder
-
-            //startNode
-
-            closedList.add(nodeObject[startX][startY]);
-            nodeObject[startX][startY].setFZero();
-            nodeObject[startX][startY].makeGreen();
-
-
-
-            CurrentCenterNodeX= currentCenterNode.getUniqueXval(); //nodeObject[startX][startY].getUniqueXval();
-            CurrentCenterNodeY= currentCenterNode.getUniqueYval();//nodeObject[startX][startY].getUniqueYval();
-
-
-            //System.out.println("startnode  x,y"+ nodeObject[1][1].getUniqueXval() + ","+ nodeObject[1][1].getUniqueYval());
-            // end node is in opposite corner
+                // add only the starting node to the closed list in the beginning.
+                // get the new node onto the closed list.
+                closedList.add(currentCenterNode);
 
 
 
 
+                // when nodes are checked they go on closed list.
+
+
+                // put the starting node on the closed list (you can leave its f at zero)
+
+                // pretend start very top corners inside boarder
+
+                //startNode
+
+                closedList.add(nodeObject[startX][startY]);
+                nodeObject[startX][startY].setFZero();
+                nodeObject[startX][startY].makeGreen();
 
 
 
-            //find the node with the least f on the open list, call it "q", search the neighbors
-            // it has max 4 neighborsNodes
-            System.out.println("make neighborsNodes");
-            // find the neighborNodes
-            findAndcheckNeighborsNodes();
+                CurrentCenterNodeX= currentCenterNode.getUniqueXval(); //nodeObject[startX][startY].getUniqueXval();
+                CurrentCenterNodeY= currentCenterNode.getUniqueYval();//nodeObject[startX][startY].getUniqueYval();
 
-            // find lowest f value and assign a new node. makes the new node the current node.
-            FindNextNodeAndChangeToThatNode();
-            // TODO remove the checked node from this list and add it to the closed list.
+
+                //System.out.println("startnode  x,y"+ nodeObject[1][1].getUniqueXval() + ","+ nodeObject[1][1].getUniqueYval());
+                // end node is in opposite corner
 
 
 
-
-
-            System.out.println("************ i = "+i);
-            System.out.println(CurrentCenterNodeX);
-            System.out.println(CurrentCenterNodeY);
-
-        /*
-
-
-
-        pop q off the open list
-        generate q's 4 successors and set their parents to q
-        for each successor
-            if successor is the goal, stop the search
-            successor.g = q.g + distance between successor and q
-            successor.h = distance from goal to successor
-            successor.f = successor.g + successor.h
-
-            if a node with the same position as successor is in the OPEN list \
-         // if wall is false
-        // check below
+                //find the node with the least f on the open list, call it "q", search the neighbors
+                // it has max 4 neighborsNodes
+                System.out.println("make neighborsNodes");
+                // find the neighborNodes
+                findAndcheckNeighborsNodes();
+                findLowestFAndmakeNewCenterNode();
 
 
 
 
+                // TODO remove the checked node from this list and add it to the closed list.
+                currentCenterNode.takeOfOpenList();
 
-       which has a lower f than successor, skip this successor
-            if a node with the same position as successor is in the CLOSED list \
-                which has a lower f than successor, skip this successor
-            otherwise, add the node to the open list
-        end
-        push q on the closed list
 
-        */
-            i++;
+
+
+                System.out.println("************ i = "+i);
+                System.out.println(CurrentCenterNodeX);
+                System.out.println(CurrentCenterNodeY);
+
+
+
+
+            /*
+
+
+
+            pop q off the open list
+            generate q's 4 successors and set their parents to q
+            for each successor
+                if successor is the goal, stop the search
+                successor.g = q.g + distance between successor and q
+                successor.h = distance from goal to successor
+                successor.f = successor.g + successor.h
+
+                if a node with the same position as successor is in the OPEN list \
+             // if wall is false
+            // check below
+
+
+
+
+
+           which has a lower f than successor, skip this successor
+                if a node with the same position as successor is in the CLOSED list \
+                    which has a lower f than successor, skip this successor
+                otherwise, add the node to the open list
+            end
+            push q on the closed list
+
+            */
+                i++;
+
+
+            int currentNodeH = currentCenterNode.getH();
+            System.out.println("currentNodeH? = "+ currentNodeH);
+            System.out.println("currentCenterNode(x,y)"+currentCenterNode.getUniqueXval() + ","+ currentCenterNode.getUniqueYval());
+            System.out.println(":::::::::::::::::::::::::::::::WHILE end::::::::::::::::::::::::");
+
+
+            /*
+            // test TODO change it THis block shuold print the hole tree as a list.
+            Map<Integer, NodeObject> treeMap = new TreeMap<Integer, NodeObject>(
+                    new Comparator<Integer>() {
+
+                        @Override
+                        public int compare(Integer o1, Integer o2) {
+                            return o2.compareTo(o1);
+                        }
+
+                    });
+
+            NavigableMap.putAll(OpenlistUncheckedNeighbors);
+            printMap(OpenlistUncheckedNeighbors); */
         }
 
         // what is the f and h and g?
-        int currentNodeH = currentCenterNode.getH();
-        System.out.println("currentNodeH? = "+ currentNodeH);
-        System.out.println("currentCenterNode(x,y)"+currentCenterNode.getUniqueXval() + ","+ currentCenterNode.getUniqueYval());
+
 
         goalNode.setRectColor(Color.RED);
 
-    }
+        // now when the goal is found track the way back.
+        makeThePath();
 
-    private void FindNextNodeAndChangeToThatNode() {
-        // method inspired from:
-        //http://www.java-examples.com/get-lowest-and-highest-key-stored-java-treemap-example
-
-
-        // the keys are always organised so the first key is the lowest value.
-        System.out.println("Lowest key Stored in Java TreeMap is : "+ OpenlistUncheckedNeighbors.firstKey());
-
-        int lowestFvalue= OpenlistUncheckedNeighbors.firstKey();
-       System.out.println("Value is: "+ OpenlistUncheckedNeighbors.get(lowestFvalue));
-
-        // we choose the next node with the lowest f value.
-        NodeObject nextNode = OpenlistUncheckedNeighbors.get(lowestFvalue);
-
-        System.out.println("nextNodeX="+nextNode.getUniqueXval());
-        System.out.println("nextNodeY="+nextNode.getUniqueYval());
-
-        // change the color of that node.
-        nextNode.setRectColor(Color.PINK);
-
-        //note where the  nextnode camefrom, if came from the Currentcenternode.
-        //nextNode.setCameFrom(currentCenterNode); // pac man is the centernode in the beginning.
-
-
-        //******* CHOOSE NEW NODE!! ********
-        // remove that the lowest F value node from the map.
-        OpenlistUncheckedNeighbors.remove(OpenlistUncheckedNeighbors.firstKey());
-        // when we are done with the current node we try the next node and make the new currentCenterNode.
-        // set next node equal to current node
-        currentCenterNode = nextNode;
-        // get the newnode is now the current node and is added to closed list.
-        // now its been tried, this is added in the while loop
-
-
-
-
-
-
+        gostFollowThePath();
 
 
     }
+
+    private void gostFollowThePath() {
+
+        // now make the Gost move one step.
+
+    }
+
+
+    private void makeThePath() {
+        //int i =0;
+        while(true)
+        {
+            if (currentCenterNode ==pacmanNode )
+            {
+                System.out.println("path done ");
+                break;
+            }
+
+            // add the nodes to the final pathlist.
+            finalPathNodes.add(currentCenterNode);
+
+            currentCenterNode.setRectColor(Color.ORANGE);
+            // change to next node.
+            NodeObject previusNode = (NodeObject) currentCenterNode.getcameFrom();
+
+            previusNode.setRectColor(Color.ORANGE);
+
+            System.out.println("previusNode (x,y)  "+previusNode.getUniqueXval()+","+previusNode.getUniqueYval());
+
+
+            // change the previus node to currentcenterNode
+            currentCenterNode =  previusNode;
+            //i++;
+
+            // add every step to an arraylist.
+
+
+
+
+
+
+        }
+
+    }
+
+    private void findLowestFAndmakeNewCenterNode() {
+
+        //
+        // TODO !!!find out how this works...
+
+
+        Map.Entry<NodeObject, Double> min = Collections.min(OpenlistUncheckedNeighbors.entrySet(), new Comparator<Map.Entry<NodeObject, Double>>() {
+            public int compare(Map.Entry<NodeObject, Double> entry1, Map.Entry<NodeObject, Double> entry2) {
+                return entry1.getValue().compareTo(entry2.getValue());
+            }
+        });
+
+        System.out.println("Min F value printed ++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println(min.getValue());
+        System.out.println("its key:");
+        System.out.println(min.getKey());
+        System.out.println();
+
+        NodeObject newLowestNode = min.getKey();
+
+        // set it new centerNode
+        currentCenterNode = newLowestNode;
+        currentCenterNode.setRectColor(Color.PINK);
+
+        closedList.add(newLowestNode);
+
+
+
+        // remove key pair from OpenlistUncheckedNeighbors List
+        OpenlistUncheckedNeighbors.remove(min.getKey());
+
+
+
+        //note where the  nextnode camefrom, if came from the Currentcenternode. that is done already in the previus method.
+
+
+
+    }
+
+
+
+    private void printMap(TreeMap<Integer, NodeObject> map) {
+
+            for (Map.Entry<Integer, NodeObject> entry : map.entrySet()) {
+                System.out.println("Key : " + entry.getKey()
+                        + " Value : " + entry.getValue());
+            }
+
+    }
+
     // check above
     private void findAndcheckNeighborsNodes() {
         System.out.println("***********************************************checking nodes**********************************");
@@ -290,8 +377,13 @@ public class A_star {
             System.out.println("node above not wall");
             nodeAbove.setRectColor(Color.BLUE);
             int h= getAndcalculateH(nodeAbove);
+            System.out.println("h->Astar = "+h);
             // store h in node.
             nodeAbove.setH(h);
+            int hFromObject = nodeAbove.getH();
+            System.out.println("hFromObject" +hFromObject);
+
+
 
             // calculate g. g = current g value + new g value, so the g value in the end when the goal is reached is the
             //  "total  walking distance"
@@ -305,9 +397,13 @@ public class A_star {
 
             // add to treemap openlist
             // insert f and node
-            OpenlistUncheckedNeighbors.put(f,nodeAbove);
+            double fDouble = (double) f;
+            OpenlistUncheckedNeighbors.put(nodeAbove,fDouble);
 
 
+        }
+        else if(!nodeAbove.isOnClosedList()){
+            System.out.println("nodeAbove is on closed list");
         }
         else {
             System.out.println("wall at y : " + (CurrentCenterNodeY - 1));
@@ -336,7 +432,9 @@ public class A_star {
             int h= getAndcalculateH(nodeObject[CurrentCenterNodeX][CurrentCenterNodeY+1]);
             nodebelow.calculateG(stepValueG);
             int g= nodebelow.getG();
+
             int f= g+h;
+
             System.out.println("F = "+f +"="+g+"+"+h);
             //int h = calculateH(nodeObject[CurrentCenterNodeX][CurrentCenterNodeY+1]);
             //int h = nodeObject[CurrentCenterNodeX][CurrentCenterNodeY+1].calculateAndGetH();
@@ -346,11 +444,16 @@ public class A_star {
 
             // insert f and node
             System.out.println("coordinates = " +nodebelow.getUniqueXval()+ ", "+ nodebelow.getUniqueYval());
-            OpenlistUncheckedNeighbors.put(f,nodeObject[CurrentCenterNodeX][CurrentCenterNodeY+1]);
+            double fDouble =  (double) f;
+            OpenlistUncheckedNeighbors.put(nodebelow,fDouble);
 
 
 
         }
+        else if(!nodebelow.isOnClosedList()){
+            System.out.println("nodebelow is on closed list");
+        }
+
         else {
             System.out.println("wall at y : " + (CurrentCenterNodeY + 1));
         }
@@ -375,8 +478,12 @@ public class A_star {
 
 
             // insert f and node
-            OpenlistUncheckedNeighbors.put(f,nodeObject[CurrentCenterNodeX-1][CurrentCenterNodeY]);
+            double FDouble =  (double) f;
+            OpenlistUncheckedNeighbors.put(nodeLeft,FDouble);
 
+        }
+        else if(!nodeLeft.isOnClosedList()){
+            System.out.println("nodeLeft is on closed list");
         }
         else {
             System.out.println("wall at X : " + (CurrentCenterNodeX - 1));
@@ -402,11 +509,14 @@ public class A_star {
             System.out.println("coordinates = " +noderight.getUniqueXval()+ ", "+ noderight.getUniqueYval());
 
             // insert f and node
-            OpenlistUncheckedNeighbors.put(f,nodeObject[CurrentCenterNodeX+1][CurrentCenterNodeY]);
+            double fDouble = (double) f;
+            OpenlistUncheckedNeighbors.put(noderight,fDouble);
 
 
         }
-
+        else if(!noderight.isOnClosedList()) {
+            System.out.println("noderight is on closed list");
+        }
         else {
             System.out.println("wall at X : " + (CurrentCenterNodeX + 1));
         }

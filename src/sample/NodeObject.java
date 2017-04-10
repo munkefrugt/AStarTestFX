@@ -29,7 +29,7 @@ public class NodeObject {
 
 
     Rectangle rect;
-    NodeObject CameFrom;
+    NodeObject cameFrom;
     // in the beginning they are all on openlist exept the startnode witch is on closed list, there for its should be false
      boolean isOnClosedList =false;
 
@@ -115,22 +115,14 @@ public class NodeObject {
         rect.setFill(Color.GREEN);
     }
 
-    public int calculateAndGetH() {
 
 
 
-        return 0;
-    }
-
-    public void makeRed() {
-        rect.setFill(Color.RED);
-
-    }
 
 
     public void setCameFrom(NodeObject currentCenterNode) {
 
-        this.CameFrom = currentCenterNode;
+        this.cameFrom = currentCenterNode;
 
     }
 
@@ -144,15 +136,15 @@ public class NodeObject {
     }
 
     public int getH() {
-        System.out.println("h = "+h);
+        System.out.println("inside NodeObject.class h = "+h);
         return h;
     }
 
     public void calculateG(int stepvalueG) {
 
 
-        g = CameFrom.getG() + stepvalueG;
-        System.out.println("CameFrom.getG()"+CameFrom.getG());
+        g = cameFrom.getG() + stepvalueG;
+        System.out.println("cameFrom.getG()"+ cameFrom.getG());
         System.out.println("g = "+ g +"**************************");
     }
 
@@ -165,11 +157,18 @@ public class NodeObject {
         return isOnClosedList;
     }
 
-    public void putOnclosedList() {
 
-    }
 
     public void takeOfOpenList() {
         isOnClosedList = true;
+    }
+
+    public int getF() {
+        return f;
+    }
+
+    public Object getcameFrom() {
+
+        return cameFrom;
     }
 }

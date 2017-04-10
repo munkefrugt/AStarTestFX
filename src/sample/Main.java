@@ -54,9 +54,9 @@ public class Main extends Application {
 
 
     NodeObject[][] nodeObject;
-    int boxesX = 20;
-    int boxesY = 20;
-    int blockSize = 50;
+    int boxesX = 40;
+    int boxesY = 40;
+    int blockSize = 20;
 
     int yHeight = boxesY *blockSize;
     int xWitdh = boxesX *blockSize ;
@@ -131,8 +131,8 @@ public class Main extends Application {
         final Rectangle pacMan = new Rectangle((directionX *(blockSize)+blockSize), (directionY *(blockSize)+blockSize), blockSize, blockSize);
         pacMan.setFill(Color.YELLOW);
 
-        final Rectangle gostpink = new Rectangle(40*blockSize, 40* blockSize, blockSize, blockSize);
-        gostpink.setFill(Color.AQUA);
+        //final Rectangle gostpink = new Rectangle(40*blockSize, 40* blockSize, blockSize, blockSize);
+        //gostpink.setFill(Color.AQUA);
 
         // start location
 
@@ -155,11 +155,11 @@ public class Main extends Application {
 
 
 
-        root.getChildren().addAll(pacMan,gostpink);
+        root.getChildren().addAll(pacMan);
 
         // add search algoritm classes
+        Gost gost = new Gost();
         A_star a_star = new A_star(root,nodeObject,blockSize, boxesX,boxesY);
-
 
         primaryStage.setTitle("A*");
         primaryStage.setScene(scene);
@@ -168,13 +168,15 @@ public class Main extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+
                 //int directionX = 0, directionY = 0;
                 Pacman pacman = new Pacman();
                 if (up)
                 {
                     System.out.println("up activate");
                     directionY = directionY -blockSize;
-                    // upate all
+                    // update search algoritms
+                    updateSearchAlgoritms();
 
 
 
@@ -208,7 +210,7 @@ public class Main extends Application {
                 //random x
 
 
-                gostpink.relocate(gostPinkpositionX, gostPinkpositionY);
+                //gostpink.relocate(gostPinkpositionX, gostPinkpositionY);
 
                 //sleep
                 try {
@@ -225,9 +227,11 @@ public class Main extends Application {
 
     }
 
-    public void gostMoves() {
+    public void updateSearchAlgoritms() {
 
     }
+
+
 
 
     public static void main(String[] args) {
